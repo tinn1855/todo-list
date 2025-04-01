@@ -1,0 +1,148 @@
+/* CSS VARIABLE  */
+:root {
+  --color-white: #ffffff;
+  --color-black: #030303;
+  --color-dark-blue: #0754a1;
+  --color-blue: #0195fe;
+  --color-light-blue: #b4e1ff;
+  --color-green: #00c406;
+  --color-red: #fd4946;
+  --color-pink: #ffc4b6;
+}
+/* CSS BASIC  */
+* {
+  box-sizing: border-box;
+}
+body {
+  font-family: "Inter";
+}
+
+select {
+  appearance: none;
+  outline: none;
+  background-color: transparent;
+  border: solid 1px var(--color-dark-gray);
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* TYPOGRAPHY  */
+.text-center {
+  text-align: center;
+}
+
+/* CSS LAYOUT  */
+
+.container {
+  max-width: 1024px;
+  margin: 0 auto;
+}
+.flex {
+  display: flex;
+}
+
+.w-25 {
+  width: 25%;
+}
+
+.w-75 {
+  width: 75%;
+}
+
+.w-full {
+  width: 100%;
+}
+
+/* COMPONENTS  */
+.btn-add {
+  border: none;
+  outline: none;
+  background-color: var(--color-blue);
+  color: var(--color-white);
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  border-radius: 9999px;
+  padding: 10px 20px;
+}
+
+.btn-edit {
+  border: none;
+  outline: none;
+  background-color: var(--color-dark-blue);
+  color: var(--color-white);
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  border-radius: 9999px;
+  padding: 10px 20px;
+}
+
+.btn-delete {
+  border: none;
+  outline: none;
+  background-color: var(--color-red);
+  color: var(--color-white);
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  border-radius: 9999px;
+  padding: 10px 20px;
+}
+
+.input-default {
+  outline: none;
+  border: solid 0.5px;
+  border-radius: 9999px;
+  padding: 10px 20px;
+}
+
+.completed {
+  background-color: var(--color-green);
+  color: var(--color-white);
+  text-align: center;
+  border: none;
+  outline: none;
+  font-weight: 600;
+  padding: 5px 10px;
+}
+
+.incomplete {
+  background-color: var(--color-red);
+  color: var(--color-white);
+  text-align: center;
+  border: none;
+  outline: none;
+  font-weight: 600;
+  padding: 5px 10px;
+}
+
+.high-priority {
+  color: var(--color-red);
+  text-align: center;
+  border: solid var(--color-red) 1px;
+  outline: none;
+  font-weight: 600;
+  padding: 5px 10px;
+}
+
+.medium-priority {
+  color: var(--color-blue);
+  text-align: center;
+  border: solid var(--color-blue) 1px;
+  outline: none;
+  font-weight: 600;
+  padding: 5px 10px;
+}
+
+.low-priority {
+  color: var(--color-dark-blue);
+  text-align: center;
+  border: solid var(--color-dark-blue) 1px;
+  outline: none;
+  font-weight: 600;
+  padding: 5px 10px;
+}
+
+/* UTILITIES  */
