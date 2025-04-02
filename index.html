@@ -4,6 +4,53 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TODO LIST</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
   </head>
-  <body></body>
+  <body>
+    <div class="container">
+      <h1 class="text-center">TODO LIST</h1>
+      <form class="flex gap-5" id="formAdd">
+        <div class="w-75">
+          <label for="input-box">
+            <input
+              type="text"
+              name="input-box"
+              id="input-box"
+              class="input-default w-full"
+              placeholder="Add your text"
+            />
+          </label>
+        </div>
+        <div class="w-25">
+          <button type="submit" class="btn-add w-full">Add</button>
+        </div>
+      </form>
+
+      <div class="container"></div>
+      <table>
+        <tbody>
+          <tr>
+            <th></th>
+            <th>Task</th>
+            <th>Status</th>
+            <th>Priority</th>
+            <th>Action</th>
+          </tr>
+        </tbody>
+        <tbody id="tableTasks"></tbody>
+      </table>
+    </div>
+
+    <script src="assets/js/main.js"></script>
+  </body>
 </html>

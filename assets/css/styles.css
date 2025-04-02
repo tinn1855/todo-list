@@ -8,6 +8,8 @@
   --color-green: #00c406;
   --color-red: #fd4946;
   --color-pink: #ffc4b6;
+  --color-light-gray: #f7f7f7;
+  --color-gray: #9fa2a8;
 }
 /* CSS BASIC  */
 * {
@@ -27,9 +29,36 @@ select {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  color: var(--color-gray);
+}
+
+th,
+td {
+  padding: 8px;
+  text-align: left;
+}
+th {
+  background-color: var(--color-light-gray);
+  cursor: pointer;
+}
+tr:nth-child(even) {
+  background-color: var(--color-light-gray);
+}
+
 /* TYPOGRAPHY  */
 .text-center {
   text-align: center;
+}
+
+.text-white {
+  color: var(--color-white);
+}
+.text-red {
+  color: var(--color-red);
 }
 
 /* CSS LAYOUT  */
@@ -54,6 +83,10 @@ select {
   width: 100%;
 }
 
+.gap-5 {
+  gap: 20px;
+}
+
 /* COMPONENTS  */
 .btn-add {
   border: none;
@@ -64,7 +97,7 @@ select {
   cursor: pointer;
   text-align: center;
   border-radius: 9999px;
-  padding: 10px 20px;
+  padding: 12px 20px;
 }
 
 .btn-edit {
@@ -93,9 +126,10 @@ select {
 
 .input-default {
   outline: none;
-  border: solid 0.5px;
+  border: none;
+  border: var(--color-gray) solid 1px;
   border-radius: 9999px;
-  padding: 10px 20px;
+  padding: 11px 20px;
 }
 
 .completed {
