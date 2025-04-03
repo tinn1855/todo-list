@@ -1,4 +1,5 @@
-let tableTasks = document.getElementById("tableTasks");
+const tableTasks = document.getElementById("tableTasks");
+
 const listTasks = [
   {
     id: 1,
@@ -134,31 +135,79 @@ document.getElementById("formAdd").addEventListener("submit", function (e) {
   inputBox.value = "";
 });
 
+const modalDelete = document.getElementById("deleteModal");
+let deleteTaskId = null;
+
 function deleteTaskById(taskId) {
-  const taskIndex = listTasks.findIndex((task) => task.id === taskId);
+  deleteTaskId = taskId;
+  modalDelete.style.display = "flex";
+}
+
+function confirmDelete() {
+  const taskIndex = listTasks.find((task) => task.id === deleteTaskId);
   if (taskIndex !== -1) {
     listTasks.splice(taskIndex, 1);
     renderTasks();
   }
+  closeDeleteModal();
 }
 
+function cancelDelete() {
+  closeDeleteModal();
+}
+
+function closeDeleteModal() {
+  modalDelete.style.display = "none";
+}
+
+window.addEventListener("click", (e) => {
+  if (e.target === modalDelete) {
+    closeDeleteModal();
+  }
+});
+
+const modalEdit = document.getElementById("editModal");
+let editTaskId = null;
+
 function editTask(taskId) {
+  editTaskId = taskId;
   const taskToEdit = listTasks.find((task) => task.id === taskId);
+  const editTask = document.getElementById("editTask");
   if (taskToEdit) {
-    const newDescription = prompt("Add your text", taskToEdit.description);
-    const error = validateInput(newDescription);
+    editTask.value = taskToEdit.description;
+    modalEdit.style.display = "flex";
+  }
+}
 
-    if (newDescription === null) {
-      return;
-    }
-    if (error) {
-      alert(error);
-      return;
-    }
+function confirmEdit() {
+  if (editTaskId === null || editTaskId === undefined) {
+    console.error("LỖI: Không có taskId hợp lệ để cập nhật!");
+    return;
+  }
+  const editTask = document.getElementById("editTask");
+  const newDescription = editTask.value;
+  const error = validateInput(newDescription);
 
+  if (error) {
+    alert(error);
+    return;
+  }
+
+  const taskToEdit = listTasks.find((task) => task.id === editTaskId);
+  if (taskToEdit) {
     taskToEdit.description = newDescription;
     renderTasks();
   }
+
+  closeEditModal();
+}
+
+function cancelEdit() {
+  closeEditModal();
+}
+
+function closeEditModal() {
+  modalEdit.style.display = "none";
 }
 
 function changeStatus(taskId, newStatus) {

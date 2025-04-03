@@ -49,6 +49,54 @@
         </tbody>
         <tbody id="tableTasks"></tbody>
       </table>
+      <div id="deleteModal" class="modal-delete">
+        <div class="modal-delete-content">
+          <div>
+            <h2>DELETE TASK</h2>
+            <p>Are you sure delete this task?</p>
+          </div>
+          <div class="flex gap-2">
+            <button
+              class="btn-delete w-50"
+              id="confirmDelete"
+              onclick="confirmDelete()"
+            >
+              OK
+            </button>
+            <button
+              class="bg-gray btn-delete w-50"
+              id="cancelDelete"
+              onclick="cancelDelete()"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+      <div id="editModal" class="modal-edit">
+        <div class="modal-edit-content gap-5">
+          <div>
+            <h2 class="text-center">Enter the content of the new task</h2>
+            <input type="text" class="input-default w-full" id="editTask" />
+          </div>
+          <div class="flex gap-2 mt-5">
+            <button
+              class="btn-add w-50"
+              id="confirmDelete"
+              onclick="confirmEdit()"
+            >
+              Save
+            </button>
+            <button
+              class="bg-gray btn-delete w-50"
+              id="cancelEdit"
+              onclick="cancelEdit()"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <script src="assets/js/main.js"></script>
