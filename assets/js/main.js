@@ -223,4 +223,22 @@ function sortTask() {
   renderTask();
 }
 
-console.log(listTasks);
+function sortTaskByStatus() {
+  if (currentSortState === 0) {
+    listTasks.sort((a, b) => {
+      if (a.status === b.status) return a.id - b.id;
+      return a.status === "completed" ? -1 : 1;
+    });
+    currentSortState = 1;
+  } else if (currentSortState === 1) {
+    listTasks.sort((a, b) => {
+      if (a.status === b.status) return a.id - b.id;
+      return a.status === "incomplete" ? -1 : 1;
+    });
+    currentSortState = 2;
+  } else {
+    listTasks.sort((a, b) => a.id - b.id);
+    currentSortState = 0;
+  }
+  renderTask();
+}
