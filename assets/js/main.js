@@ -1,4 +1,10 @@
 const tableTasks = document.getElementById("tableTasks");
+const modalDelete = document.getElementById("deleteModal");
+const modalEdit = document.getElementById("editModal");
+const modalError = document.getElementById("errorModal");
+const inputBox = document.getElementById("input-box");
+const editTaskInput = document.getElementById("editTask");
+const errorMessage = document.getElementById("errorMessage");
 
 const listTasks = [
   {
@@ -21,211 +27,200 @@ const listTasks = [
   },
 ];
 
-function renderTasks() {
-  tableTasks.innerHTML = "";
-  listTasks.map((task) => {
-    let row = document.createElement("tr");
-    row.innerHTML = `
-        <td>
-            <input type="checkbox" />
-        </td>
-        <td>${task.description}</td>
-        <td>
-            <select 
-              class="${task.status}"
-              onchange="changeStatus(${task.id}, this.value)"
-              
-            >
-              <option value="incomplete"
-                ${selectedOption(task.status, "incompleted")}
-              >
-                Chưa hoàn thành
-              </option>
-              <option 
-                value="completed"
-                ${selectedOption(task.status, "completed")}
-              >
-                Hoàn thành
-              </option>
-            </select>
-        </td>
-        <td>
-            <select 
-              class="${task.priority}" 
-              onchange="changePriority(${task.id}, this.value)"
-            >
-              <option 
-                value="high-priority"
-                 ${selectedOption(task.priority, "high-priority")}
-              > 
-                Cao 
-              </option>
-              <option 
-                value="medium-priority"
-                ${selectedOption(task.priority, "medium-priority")}
-              >
-                Vừa
-              </option>
-              <option 
-                value="low-priority"
-                 ${selectedOption(task.priority, "low-priority")}
-              >
-                Thấp
-              </option>
-            </select>
-        </td>
-        <td>
-            <button class="btn-edit" onclick="editTask(${task.id})">
-                <i class="fa-solid fa-pen-to-square"></i>
-            </button>
-            <button class="btn-delete" onclick="deleteTaskById(${task.id})">
-                <i class="fa-solid fa-trash"></i>
-            </button>
-        </td>
-    `;
-    tableTasks.appendChild(row);
-  });
+let deleteTaskId = null;
+let editTaskId = null;
+
+function findTaskById(taskId) {
+  return listTasks.find((task) => task.id === taskId);
 }
-renderTasks();
 
-function validateInput(inputBox) {
-  // Kiểm tra input có rỗng hay không
-  if (!inputBox || /^\s*$/.test(inputBox)) {
-    return "Task cannot be empty!";
+function updateTask(taskId, field, value) {
+  const task = findTaskById(taskId);
+  if (task) {
+    task[field] = value;
+    renderTask();
   }
+}
 
-  // Kiểm tra có chứa thẻ HTML không
-  if (/<[a-z][\s\S]*>/i.test(inputBox)) {
-    return "Task cannot contain HTML tags!";
-  }
+function selectOption(id, field, currentValue, options) {
+  return `
+    <select 
+      class="${currentValue}"
+     onchange="updateTask(${id}, '${field}', this.value)"
+    >
+      ${options
+        .map(
+          (opt) =>
+            `<option 
+              value="${opt.value}" 
+              ${opt.value === currentValue ? "selected" : ""}>
+              ${opt.label}
+            </option>`
+        )
+        .join("")}
+    </select>
+  
+  `;
+}
 
-  // Kiểm tra bắt đầu bằng ký tự đặc biệt
-  if (/^[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(inputBox)) {
+function renderTask() {
+  tableTasks.innerHTML = listTasks
+    .map(
+      (task) => `
+    <tr>
+      <td><input type="checkbox"></td>
+      <td>${task.description}</td>
+      <td>
+        ${selectOption(task.id, "status", task.status, [
+          { value: "incomplete", label: "Chưa hoàn thành" },
+          { value: "completed", label: "Hoàn thành" },
+        ])}
+      </td>
+      <td>
+        ${selectOption(task.id, "priority", task.priority, [
+          { value: "high-priority", label: "Cao" },
+          { value: "medium-priority", label: "Vừa" },
+          { value: "low-priority", label: "Thấp" },
+        ])}
+      </td>
+      <td>
+        <button class="btn-edit" onclick="editTask(${task.id})">
+          <i class="fa-solid fa-pen-to-square"></i>
+        </button>
+        <button class="btn-delete" onclick="deleteTaskById(${task.id})">
+          <i class="fa-solid fa-trash"></i>
+        </button>
+      </td>
+    </tr>`
+    )
+    .join("");
+}
+
+renderTask();
+
+function validateInput(input) {
+  const trimmed = input.trim();
+  if (!trimmed) return "Task cannot be empty!";
+  if (/<[a-z][\s\S]*>/i.test(trimmed)) return "Task cannot contain HTML tags!";
+  if (/^[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(trimmed))
     return "Task cannot start with special characters!";
-  }
-
   return null;
 }
 
-function addTask(descriptionTask) {
-  const newTask = {
+function addTask(description) {
+  listTasks.push({
     id: listTasks.length + 1,
-    description: descriptionTask,
+    description: description.trim(),
     status: "incomplete",
     priority: "medium-priority",
-  };
-
-  listTasks.push(newTask);
-  renderTasks();
+  });
+  renderTask();
 }
 
 document.getElementById("formAdd").addEventListener("submit", function (e) {
   e.preventDefault();
-
-  const inputBox = document.getElementById("input-box");
-  const descriptionTask = inputBox.value.trim();
-  const error = validateInput(descriptionTask);
-
+  const description = inputBox.value;
+  const error = validateInput(description);
   if (error) {
-    alert(error);
+    openErrorModal(error);
     return;
   }
-
-  addTask(descriptionTask);
+  addTask(description);
   inputBox.value = "";
 });
 
-const modalDelete = document.getElementById("deleteModal");
-let deleteTaskId = null;
-
 function deleteTaskById(taskId) {
   deleteTaskId = taskId;
-  modalDelete.style.display = "flex";
+  openModal(modalDelete);
 }
 
 function confirmDelete() {
-  const taskIndex = listTasks.find((task) => task.id === deleteTaskId);
-  if (taskIndex !== -1) {
-    listTasks.splice(taskIndex, 1);
-    renderTasks();
+  const indexTask = listTasks.findIndex((task) => task.id === deleteTaskId);
+  if (indexTask !== -1) {
+    listTasks.splice(indexTask, 1);
+    renderTask();
   }
-  closeDeleteModal();
+  closeModal(modalDelete);
 }
 
 function cancelDelete() {
-  closeDeleteModal();
+  closeModal(modalDelete);
 }
 
-function closeDeleteModal() {
-  modalDelete.style.display = "none";
-}
-
-window.addEventListener("click", (e) => {
-  if (e.target === modalDelete) {
-    closeDeleteModal();
+function deleteMultipleTasks(taskIds) {
+  for (let i = listTasks.length - 1; i >= 0; i--) {
+    if (taskIds.includes(listTasks[i].id)) {
+      listTasks.splice(i, 1);
+    }
   }
-});
-
-const modalEdit = document.getElementById("editModal");
-let editTaskId = null;
+  renderTask();
+}
 
 function editTask(taskId) {
   editTaskId = taskId;
-  const taskToEdit = listTasks.find((task) => task.id === taskId);
-  const editTask = document.getElementById("editTask");
-  if (taskToEdit) {
-    editTask.value = taskToEdit.description;
-    modalEdit.style.display = "flex";
+  const taskEdit = findTaskById(taskId);
+  if (taskEdit) {
+    editTaskInput.value = taskEdit.description;
+    openModal(modalEdit);
+    editTaskInput.focus();
+    editTaskInput.select();
   }
 }
 
 function confirmEdit() {
-  if (editTaskId === null || editTaskId === undefined) {
-    console.error("LỖI: Không có taskId hợp lệ để cập nhật!");
-    return;
-  }
-  const editTask = document.getElementById("editTask");
-  const newDescription = editTask.value;
+  const newDescription = editTaskInput.value;
   const error = validateInput(newDescription);
-
   if (error) {
     alert(error);
     return;
   }
-
-  const taskToEdit = listTasks.find((task) => task.id === editTaskId);
-  if (taskToEdit) {
-    taskToEdit.description = newDescription;
-    renderTasks();
+  const taskEdit = findTaskById(editTaskId);
+  if (taskEdit) {
+    taskEdit.description = newDescription.trim();
+    renderTask();
   }
-
-  closeEditModal();
+  closeModal(modalEdit);
 }
 
 function cancelEdit() {
-  closeEditModal();
+  closeModal(modalEdit);
+}
+function openErrorModal(message) {
+  errorMessage.innerText = message;
+  openModal(modalError);
+}
+function closeErrorModal() {
+  closeModal(modalError);
 }
 
-function closeEditModal() {
-  modalEdit.style.display = "none";
+function openModal(modal) {
+  modal.style.display = "flex";
 }
 
-function changeStatus(taskId, newStatus) {
-  let task = listTasks.find((task) => task.id === taskId);
-  if (task) {
-    task.status = newStatus;
-    renderTasks();
+function closeModal(modal) {
+  modal.style.display = "none";
+}
+
+window.addEventListener("click", (e) => {
+  if (e.target === modalDelete) closeModal(modalDelete);
+  if (e.target === modalEdit) closeModal(modalEdit);
+  if (e.target === modalError) closeModal(modalError);
+});
+
+let currentSortState = 0;
+
+function sortTask() {
+  if (currentSortState === 0) {
+    listTasks.sort((a, b) => a.description.localeCompare(b.description));
+    currentSortState = 1;
+  } else if (currentSortState === 1) {
+    listTasks.sort((a, b) => b.description.localeCompare(a.description));
+    currentSortState = 2;
+  } else {
+    listTasks.sort((a, b) => a.id - b.id);
+    currentSortState = 0;
   }
+  renderTask();
 }
 
-function changePriority(taskId, newPriority) {
-  let task = listTasks.find((task) => task.id === taskId);
-  if (task) {
-    task.priority = newPriority;
-    renderTasks();
-  }
-}
-
-function selectedOption(value, optionValue) {
-  return value === optionValue ? "selected" : "";
-}
+console.log(listTasks);

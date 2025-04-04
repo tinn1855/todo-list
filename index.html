@@ -35,13 +35,14 @@
           <button type="submit" class="btn-add w-full">Add</button>
         </div>
       </form>
-
-      <div class="container"></div>
       <table>
         <tbody>
           <tr>
             <th></th>
-            <th>Task</th>
+            <th onclick="sortTask()" class="flex gap-2">
+              Task
+              <i class="fa-solid fa-sort-down"></i>
+            </th>
             <th>Status</th>
             <th>Priority</th>
             <th>Action</th>
@@ -95,6 +96,14 @@
               Cancel
             </button>
           </div>
+        </div>
+      </div>
+      <div id="errorModal" class="modal-error">
+        <div class="modal-error-content">
+          <p id="errorMessage"></p>
+          <button class="btn-add w-50 bg-gray" onclick="closeErrorModal()">
+            Đóng
+          </button>
         </div>
       </div>
     </div>
