@@ -86,8 +86,7 @@ function renderTask() {
     tableTasks.innerHTML = `
       <tr>
         <td colspan="5" class="text-center py-5">
-          <p>No tasks match the description</p>
-          <a href="/" class="text-white bg-gray btn">Back</a>
+          <p>Task is empty!</p>
         </td>
       </tr>
     `;
@@ -168,8 +167,8 @@ document.getElementById("formAdd").addEventListener("submit", function (e) {
 document.getElementById("search-form").addEventListener("submit", function (e) {
   e.preventDefault();
   const searchInput = document.getElementById("search-input");
+
   searchDescription = searchInput.value.trim().toLowerCase();
-  console.log(searchDescription);
   searchInput.value = "";
   renderTask();
 });
