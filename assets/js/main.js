@@ -5,6 +5,7 @@ const modalError = document.getElementById("errorModal");
 const inputBox = document.getElementById("input-box");
 const editTaskInput = document.getElementById("editTask");
 const errorMessage = document.getElementById("errorMessage");
+const btnDeleteAll = document.getElementById("deleteAllTask");
 
 const listTasks = [
   {
@@ -29,6 +30,7 @@ const listTasks = [
 
 let deleteTaskId = null;
 let editTaskId = null;
+let currentFilterStatus = "all";
 
 function findTaskById(taskId) {
   return listTasks.find((task) => task.id === taskId);
@@ -64,11 +66,22 @@ function selectOption(id, field, currentValue, options) {
 }
 
 function renderTask() {
-  tableTasks.innerHTML = listTasks
+  const filterTasks = listTasks.filter((task) => {
+    return currentFilterStatus === "all" || task.status === currentFilterStatus;
+  });
+  console.log(filterTasks);
+
+  tableTasks.innerHTML = filterTasks
     .map(
       (task) => `
     <tr>
-      <td><input type="checkbox"></td>
+      <td>
+        <input 
+          type="checkbox" 
+          data-id="${task.id}" 
+          class="task-checkbox"
+        >
+      </td>
       <td>${task.description}</td>
       <td>
         ${selectOption(task.id, "status", task.status, [
@@ -103,7 +116,7 @@ function validateInput(input) {
   if (!trimmed) return "Task cannot be empty!";
   if (/<[a-z][\s\S]*>/i.test(trimmed)) return "Task cannot contain HTML tags!";
   if (/^[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(trimmed))
-    return "Task cannot start with special characters!";
+    return "Task cannot contain special characters!";
   return null;
 }
 
@@ -145,15 +158,6 @@ function confirmDelete() {
 
 function cancelDelete() {
   closeModal(modalDelete);
-}
-
-function deleteMultipleTasks(taskIds) {
-  for (let i = listTasks.length - 1; i >= 0; i--) {
-    if (taskIds.includes(listTasks[i].id)) {
-      listTasks.splice(i, 1);
-    }
-  }
-  renderTask();
 }
 
 function editTask(taskId) {
@@ -240,5 +244,58 @@ function sortTaskByStatus() {
     listTasks.sort((a, b) => a.id - b.id);
     currentSortState = 0;
   }
+  renderTask();
+}
+
+function selectAll() {
+  const checked = tableTasks.querySelectorAll(".task-checkbox");
+  const allChecked = Array.from(checked).every((checkbox) => checkbox.checked);
+  checked.forEach((checkbox) => {
+    if (checkbox) {
+      checkbox.checked = !allChecked;
+    }
+  });
+}
+
+// function deleteMultiTask() {
+//   const checkedCheckboxes = document.querySelectorAll(".task-checkbox:checked");
+//   const taskIds = Array.from(checkedCheckboxes).map((checkbox) =>
+//     parseInt(checkbox.getAttribute("data-id"))
+//   );
+
+//   for (let i = listTasks.length - 1; i >= 0; i--) {
+//     if (taskIds.includes(listTasks[i].id)) {
+//       listTasks.splice(i, 1);
+//     }
+//   }
+//   renderTask();
+// }
+
+function deleteMultiTask() {
+  openModal(document.getElementById("deleteAllModal"));
+}
+
+function confirmDeleteMultiTask() {
+  const checkedCheckboxes = document.querySelectorAll(".task-checkbox:checked");
+  const taskIds = Array.from(checkedCheckboxes).map((checkbox) =>
+    parseInt(checkbox.getAttribute("data-id"))
+  );
+
+  for (let i = listTasks.length - 1; i >= 0; i--) {
+    if (taskIds.includes(listTasks[i].id)) {
+      listTasks.splice(i, 1);
+    }
+  }
+  renderTask();
+  closeModal(document.getElementById("deleteAllModal"));
+}
+
+function cancelDeleteMultiTask() {
+  closeModal(document.getElementById("deleteAllModal"));
+}
+
+function filterByStatus() {
+  const filterSelect = document.getElementById("filterStatus");
+  currentFilterStatus = filterSelect.value;
   renderTask();
 }

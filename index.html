@@ -35,6 +35,44 @@
           <button type="submit" class="btn-add w-full">Add</button>
         </div>
       </form>
+      <div class="flex justify-between items-center mt-5 text-gray">
+        <div class="flex gap-2">
+          <button class="btn bg-gray text-white" onclick="selectAll()">
+            Select All
+          </button>
+          <button
+            class="btn-delete"
+            id="deleteAllTask"
+            onclick="deleteMultiTask()"
+          >
+            Delete All
+          </button>
+        </div>
+        <div class="flex gap-2 tex-gray">
+          <div>
+            <span>Filter:</span>
+            <select
+              class="btn text-gray"
+              id="filterStatus"
+              onchange="filterByStatus(this.value)"
+            >
+              <option value="all">All</option>
+              <option value="completed">Completed</option>
+              <option value="incomplete">Incomplete</option>
+            </select>
+          </div>
+          <form action="" class="flex gap-2">
+            <input
+              type="text"
+              class="input-default"
+              placeholder="Enter your text"
+            />
+            <button class="btn-add">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+          </form>
+        </div>
+      </div>
       <table>
         <tbody>
           <tr>
@@ -65,14 +103,14 @@
           </div>
           <div class="flex gap-2">
             <button
-              class="btn-delete w-50"
+              class="btn bg-red text-white w-50"
               id="confirmDelete"
               onclick="confirmDelete()"
             >
               OK
             </button>
             <button
-              class="bg-gray btn-delete w-50"
+              class="btn bg-gray text-white w-50"
               id="cancelDelete"
               onclick="cancelDelete()"
             >
@@ -111,6 +149,25 @@
           <button class="btn-add w-50 bg-gray" onclick="closeErrorModal()">
             Đóng
           </button>
+        </div>
+      </div>
+      <div id="deleteAllModal" class="modal-delete">
+        <div class="modal-delete-content">
+          <p>Are you sure you want to delete all selected tasks?</p>
+          <div class="flex gap-2 mt-5">
+            <button
+              class="btn-delete w-full"
+              onclick="confirmDeleteMultiTask()"
+            >
+              OK
+            </button>
+            <button
+              class="btn text-white bg-gray w-full"
+              onclick="cancelDeleteMultiTask()"
+            >
+              Cancel
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -59,6 +59,9 @@ tr:nth-child(even) {
 .text-red {
   color: var(--color-red);
 }
+.text-gray {
+  color: var(--color-gray);
+}
 
 /* CSS LAYOUT  */
 
@@ -68,6 +71,14 @@ tr:nth-child(even) {
 }
 .flex {
   display: flex;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.items-center {
+  align-items: center;
 }
 
 .w-25 {
@@ -100,7 +111,7 @@ tr:nth-child(even) {
   font-weight: 700;
   cursor: pointer;
   text-align: center;
-  border-radius: 9999px;
+  border-radius: 8px;
   padding: 12px 20px;
 }
 
@@ -112,7 +123,7 @@ tr:nth-child(even) {
   font-weight: 700;
   cursor: pointer;
   text-align: center;
-  border-radius: 9999px;
+  border-radius: 8px;
   padding: 10px 20px;
 }
 
@@ -124,7 +135,7 @@ tr:nth-child(even) {
   font-weight: 700;
   cursor: pointer;
   text-align: center;
-  border-radius: 9999px;
+  border-radius: 8px;
   padding: 10px 20px;
 }
 
@@ -132,8 +143,18 @@ tr:nth-child(even) {
   outline: none;
   border: none;
   border: var(--color-gray) solid 1px;
-  border-radius: 9999px;
+  border-radius: 8px;
   padding: 11px 20px;
+}
+
+.btn {
+  border: var(--color-gray) solid 1px;
+  outline: none;
+  background-color: transparent;
+  padding: 11px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 700;
 }
 
 .completed {
@@ -283,4 +304,8 @@ tr:nth-child(even) {
 
 .rounded-sm {
   border-radius: 8px;
+}
+
+.hidden {
+  display: none;
 }
