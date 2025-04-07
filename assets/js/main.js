@@ -26,11 +26,18 @@ const listTasks = [
     status: "incomplete",
     priority: "low-priority",
   },
+  {
+    id: 4,
+    description: "Coding",
+    status: "incomplete",
+    priority: "low-priority",
+  },
 ];
 
 let deleteTaskId = null;
 let editTaskId = null;
 let currentFilterStatus = "all";
+let searchDescription = "";
 
 function findTaskById(taskId) {
   return listTasks.find((task) => task.id === taskId);
@@ -67,8 +74,25 @@ function selectOption(id, field, currentValue, options) {
 
 function renderTask() {
   const filterTasks = listTasks.filter((task) => {
-    return currentFilterStatus === "all" || task.status === currentFilterStatus;
+    const matchSearch =
+      searchDescription === "" ||
+      task.description.toLowerCase().includes(searchDescription);
+    const matchStatus =
+      currentFilterStatus === "all" || task.status === currentFilterStatus;
+    return matchSearch && matchStatus;
   });
+
+  if (filterTasks.length === 0) {
+    tableTasks.innerHTML = `
+      <tr>
+        <td colspan="5" class="text-center py-5">
+          <p>No tasks match the description</p>
+          <a href="/" class="text-white bg-gray btn">Back</a>
+        </td>
+      </tr>
+    `;
+    return;
+  }
 
   tableTasks.innerHTML = filterTasks
     .map(
@@ -139,6 +163,15 @@ document.getElementById("formAdd").addEventListener("submit", function (e) {
   }
   addTask(description);
   inputBox.value = "";
+});
+
+document.getElementById("search-form").addEventListener("submit", function (e) {
+  e.preventDefault();
+  const searchInput = document.getElementById("search-input");
+  searchDescription = searchInput.value.trim().toLowerCase();
+  console.log(searchDescription);
+  searchInput.value = "";
+  renderTask();
 });
 
 function deleteTaskById(taskId) {
