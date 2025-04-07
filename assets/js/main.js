@@ -100,11 +100,14 @@ function renderTask() {
       <td>
         <input 
           type="checkbox" 
-          data-id="${task.id}" 
+          data-id="${task.id}"
+            id="${task.id}"
           class="task-checkbox"
         >
       </td>
-      <td>${task.description}</td>
+      <td>
+        <label class="pointer" for="${task.id}">${task.description}</label>
+      </td>
       <td>
         ${selectOption(task.id, "status", task.status, [
           { value: "incomplete", label: "Chưa hoàn thành" },

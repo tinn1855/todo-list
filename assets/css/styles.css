@@ -7,6 +7,7 @@
   --color-light-blue: #b4e1ff;
   --color-green: #00c406;
   --color-red: #fd4946;
+  --color-dark-red: #a62c2c;
   --color-pink: #ffc4b6;
   --color-light-gray: #f7f7f7;
   --color-gray: #9fa2a8;
@@ -122,6 +123,11 @@ tr:nth-child(even) {
   padding: 12px 20px;
 }
 
+.btn-add:hover {
+  background-color: var(--color-dark-blue);
+  transition: all 0.5s ease-in-out;
+}
+
 .btn-edit {
   border: none;
   outline: none;
@@ -132,6 +138,10 @@ tr:nth-child(even) {
   text-align: center;
   border-radius: 8px;
   padding: 10px 20px;
+}
+.btn-edit:hover {
+  background-color: var(--color-blue);
+  transition: all 0.3s ease-in-out;
 }
 
 .btn-delete {
@@ -145,6 +155,10 @@ tr:nth-child(even) {
   border-radius: 8px;
   padding: 10px 20px;
 }
+.btn-delete:hover {
+  background-color: var(--color-dark-red);
+  transition: all 0.3s ease-in-out;
+}
 
 .input-default {
   outline: none;
@@ -155,14 +169,21 @@ tr:nth-child(even) {
 }
 
 .btn {
-  border: var(--color-gray) solid 1px;
   outline: none;
+  border: none;
+  border: var(--color-gray) solid 0.5px;
   background-color: transparent;
   padding: 11px 8px;
   border-radius: 5px;
   cursor: pointer;
   font-weight: 700;
   font-size: 14px;
+}
+
+.btn:hover {
+  background-color: var(--color-light-gray);
+  color: var(--color-gray);
+  transition: all 0.3s ease-in-out;
 }
 
 .completed {
@@ -316,4 +337,7 @@ tr:nth-child(even) {
 
 .hidden {
   display: none;
+}
+.pointer {
+  cursor: pointer;
 }
