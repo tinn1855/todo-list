@@ -37,11 +37,15 @@
       </form>
       <div class="flex justify-between items-center mt-5 text-gray">
         <div class="flex gap-2">
-          <button class="btn bg-gray text-white" onclick="selectAll()">
+          <button
+            class="btn bg-gray text-white"
+            onclick="selectAll()"
+            id="toggleSelectTask"
+          >
             Select All
           </button>
           <button
-            class="btn-delete"
+            class="btn-delete hidden"
             id="deleteAllTask"
             onclick="deleteMultiTask()"
           >

@@ -69,7 +69,6 @@ function renderTask() {
   const filterTasks = listTasks.filter((task) => {
     return currentFilterStatus === "all" || task.status === currentFilterStatus;
   });
-  console.log(filterTasks);
 
   tableTasks.innerHTML = filterTasks
     .map(
@@ -247,29 +246,24 @@ function sortTaskByStatus() {
   renderTask();
 }
 
-function selectAll() {
-  const checked = tableTasks.querySelectorAll(".task-checkbox");
-  const allChecked = Array.from(checked).every((checkbox) => checkbox.checked);
-  checked.forEach((checkbox) => {
-    if (checkbox) {
-      checkbox.checked = !allChecked;
-    }
-  });
+function updateMultiSelect() {
+  const checkedTask = document.querySelectorAll(".task-checkbox");
+  const toggleSelectTask = document.getElementById("toggleSelectTask");
+  const anyChecked = Array.from(checkedTask).some((cb) => cb.checked);
+
+  toggleSelectTask.innerText = anyChecked ? "Unselect All" : "Select All";
+  btnDeleteAll.style.display = anyChecked ? "block" : "none";
 }
 
-// function deleteMultiTask() {
-//   const checkedCheckboxes = document.querySelectorAll(".task-checkbox:checked");
-//   const taskIds = Array.from(checkedCheckboxes).map((checkbox) =>
-//     parseInt(checkbox.getAttribute("data-id"))
-//   );
+function selectAll() {
+  const checkedTask = tableTasks.querySelectorAll(".task-checkbox");
+  const hasChecked = Array.from(checkedTask).some((cb) => cb.checked);
 
-//   for (let i = listTasks.length - 1; i >= 0; i--) {
-//     if (taskIds.includes(listTasks[i].id)) {
-//       listTasks.splice(i, 1);
-//     }
-//   }
-//   renderTask();
-// }
+  checkedTask.forEach((cb) => (cb.checked = !hasChecked));
+  updateMultiSelect();
+}
+
+tableTasks.addEventListener("change", updateMultiSelect);
 
 function deleteMultiTask() {
   openModal(document.getElementById("deleteAllModal"));
@@ -277,6 +271,7 @@ function deleteMultiTask() {
 
 function confirmDeleteMultiTask() {
   const checkedCheckboxes = document.querySelectorAll(".task-checkbox:checked");
+
   const taskIds = Array.from(checkedCheckboxes).map((checkbox) =>
     parseInt(checkbox.getAttribute("data-id"))
   );
@@ -288,6 +283,7 @@ function confirmDeleteMultiTask() {
   }
   renderTask();
   closeModal(document.getElementById("deleteAllModal"));
+  updateMultiSelect();
 }
 
 function cancelDeleteMultiTask() {
