@@ -33,6 +33,12 @@ const listTasks = [
     status: "incomplete",
     priority: "low-priority",
   },
+  {
+    id: 5,
+    description: "Learn NodeJS",
+    status: "completed",
+    priority: "low-priority",
+  },
 ];
 
 let deleteTaskId = null;
@@ -41,6 +47,8 @@ let currentFilterStatus = "all";
 let currentFilterPriority = "priority";
 let searchDescription = "";
 let currentSortState = 0;
+let currentPage = 1;
+const taskPerPage = 5;
 
 function findTaskById(taskId) {
   return listTasks.find((task) => task.id === taskId);
@@ -96,10 +104,22 @@ function renderTask() {
         </td>
       </tr>
     `;
+    renderPagination(0);
     return;
   }
 
-  tableTasks.innerHTML = filterTasks
+  const totalTasks = filterTasks.length;
+  const totalPages = Math.ceil(totalTasks / taskPerPage);
+
+  if (currentPage > totalPages) {
+    currentPage = totalPages;
+  }
+
+  const startIndex = (currentPage - 1) * taskPerPage;
+  const endIndex = startIndex + taskPerPage;
+  const tasksForPage = filterTasks.slice(startIndex, endIndex);
+
+  tableTasks.innerHTML = tasksForPage
     .map(
       (task) => `
     <tr>
@@ -138,6 +158,7 @@ function renderTask() {
     </tr>`
     )
     .join("");
+  renderPagination(totalPages);
 }
 
 renderTask();
@@ -349,5 +370,51 @@ function filterByStatus() {
 function filterByPriority() {
   const filterSelect = document.getElementById("filterPriority");
   currentFilterPriority = filterSelect.value;
+  renderTask();
+}
+
+function renderPagination(totalPages) {
+  const pagination = document.getElementById("pagination");
+
+  if (totalPages <= 1) {
+    pagination.innerHTML = "";
+    return;
+  }
+
+  let paginationHTML = `
+    <button 
+      onclick="changePage(currentPage - 1)" 
+      class="btn text-gray"
+        ${currentPage === 1 ? "disabled" : ""}
+    >
+      Previous
+    </button>`;
+
+  for (let i = 1; i <= totalPages; i++) {
+    paginationHTML += `
+      <button 
+        onclick="changePage(${i})"
+        class="btn text-gray px-3 ${
+          currentPage === i ? "bg-gray text-white" : ""
+        }"
+      >
+        ${i}
+      </button>`;
+  }
+
+  paginationHTML += `
+    <button 
+      onclick="changePage(currentPage + 1)"
+      class="btn text-gray"
+      ${currentPage === totalPages ? "disabled" : ""}
+    >
+      Next
+    </button>`;
+
+  pagination.innerHTML = paginationHTML;
+}
+
+function changePage(page) {
+  currentPage = page;
   renderTask();
 }
