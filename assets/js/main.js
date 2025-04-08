@@ -109,7 +109,7 @@ function renderTask() {
           class="task-checkbox"
         >
       </td>
-      <td>
+      <td class="truncate-1">
         <label class="pointer" for="${task.id}">${task.description}</label>
       </td>
       <td>
