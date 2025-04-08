@@ -2,6 +2,7 @@ const tableTasks = document.getElementById("tableTasks");
 const modalDelete = document.getElementById("deleteModal");
 const modalEdit = document.getElementById("editModal");
 const modalError = document.getElementById("errorModal");
+const modalDeleteAll = document.getElementById("modalDeleteAll");
 const inputBox = document.getElementById("input-box");
 const editTaskInput = document.getElementById("editTask");
 const errorMessage = document.getElementById("errorMessage");
@@ -39,6 +40,7 @@ let editTaskId = null;
 let currentFilterStatus = "all";
 let currentFilterPriority = "priority";
 let searchDescription = "";
+let currentSortState = 0;
 
 function findTaskById(taskId) {
   return listTasks.find((task) => task.id === taskId);
@@ -144,8 +146,9 @@ function validateInput(input) {
   const trimmed = input.trim();
   if (!trimmed) return "Task cannot be empty!";
   if (/<[a-z][\s\S]*>/i.test(trimmed)) return "Task cannot contain HTML tags!";
-  if (/^[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(trimmed))
+  if (/[^ \p{L}\p{N}\s.,?!&()@:]/u.test(trimmed)) {
     return "Task cannot contain special characters!";
+  }
   return null;
 }
 
@@ -243,13 +246,21 @@ function closeModal(modal) {
   modal.style.display = "none";
 }
 
-window.addEventListener("click", (e) => {
+window.addEventListener("click", function (e) {
   if (e.target === modalDelete) closeModal(modalDelete);
   if (e.target === modalEdit) closeModal(modalEdit);
   if (e.target === modalError) closeModal(modalError);
+  if (e.target === modalDeleteAll) closeModal(modalDeleteAll);
 });
 
-let currentSortState = 0;
+window.addEventListener("keydown", function (e) {
+  if (e.key === "Escape") {
+    closeModal(modalDelete);
+    closeModal(modalEdit);
+    closeModal(modalError);
+    closeModal(modalDeleteAll);
+  }
+});
 
 function sortTask() {
   if (currentSortState === 0) {
@@ -305,7 +316,7 @@ function selectAll() {
 tableTasks.addEventListener("change", updateMultiSelect);
 
 function deleteMultiTask() {
-  openModal(document.getElementById("deleteAllModal"));
+  openModal(document.getElementById("modalDeleteAll"));
 }
 
 function confirmDeleteMultiTask() {
@@ -321,12 +332,12 @@ function confirmDeleteMultiTask() {
     }
   }
   renderTask();
-  closeModal(document.getElementById("deleteAllModal"));
+  closeModal(document.getElementById("modalDeleteAll"));
   updateMultiSelect();
 }
 
 function cancelDeleteMultiTask() {
-  closeModal(document.getElementById("deleteAllModal"));
+  closeModal(document.getElementById("modalDeleteAll"));
 }
 
 function filterByStatus() {
