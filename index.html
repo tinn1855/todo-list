@@ -18,7 +18,7 @@
   </head>
   <body>
     <div class="container">
-      <h1 class="text-center">TODO LIST</h1>
+      <h1 class="text-center text-red">TODO LIST</h1>
       <form class="flex gap-5" id="formAdd">
         <div class="w-75">
           <label for="input-box">
@@ -64,18 +64,30 @@
               <option value="completed">Completed</option>
               <option value="incomplete">Incomplete</option>
             </select>
+            <select
+              class="btn text-gray"
+              id="filterPriority"
+              onchange="filterByPriority(this.value)"
+            >
+              <option value="priority">Priority</option>
+              <option value="high-priority">High</option>
+              <option value="medium-priority">Medium</option>
+              <option value="low-priority">Low</option>
+            </select>
           </div>
-          <form id="search-form" class="flex gap-2">
-            <input
-              type="text"
-              class="input-default"
-              placeholder="Enter your text"
-              id="search-input"
-            />
-            <button type="submit" class="btn-add">
-              <i class="fa-solid fa-magnifying-glass"></i>
-            </button>
-          </form>
+          <div>
+            <form id="search-form" class="flex gap-2">
+              <input
+                type="text"
+                class="input-default"
+                placeholder="Enter your text"
+                id="search-input"
+              />
+              <button type="submit" class="btn-add">
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </button>
+            </form>
+          </div>
         </div>
       </div>
       <table>
@@ -139,7 +151,7 @@
               Save
             </button>
             <button
-              class="bg-gray btn-delete w-50"
+              class="bg-gray btn text-white w-50"
               id="cancelEdit"
               onclick="cancelEdit()"
             >

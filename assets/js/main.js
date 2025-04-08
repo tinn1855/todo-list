@@ -37,6 +37,7 @@ const listTasks = [
 let deleteTaskId = null;
 let editTaskId = null;
 let currentFilterStatus = "all";
+let currentFilterPriority = "priority";
 let searchDescription = "";
 
 function findTaskById(taskId) {
@@ -79,7 +80,10 @@ function renderTask() {
       task.description.toLowerCase().includes(searchDescription);
     const matchStatus =
       currentFilterStatus === "all" || task.status === currentFilterStatus;
-    return matchSearch && matchStatus;
+    const matchPriority =
+      currentFilterPriority === "priority" ||
+      task.priority === currentFilterPriority;
+    return matchSearch && matchStatus && matchPriority;
   });
 
   if (filterTasks.length === 0) {
@@ -328,5 +332,11 @@ function cancelDeleteMultiTask() {
 function filterByStatus() {
   const filterSelect = document.getElementById("filterStatus");
   currentFilterStatus = filterSelect.value;
+  renderTask();
+}
+
+function filterByPriority() {
+  const filterSelect = document.getElementById("filterPriority");
+  currentFilterPriority = filterSelect.value;
   renderTask();
 }
